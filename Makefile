@@ -1,7 +1,10 @@
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+base_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+
 # Golang project related settings
-APP = base
-PROJECT_PACKAGE = github.com/lucassvieira/$(APP)
-BUILD_DIRECTORY = build
+APP=$(base_dir)
+PROJECT_PACKAGE=github.com/lucassvieira/$(APP)
+BUILD_DIRECTORY=build
 LINTER_EXECUTABLE := golangci-lint
 LINTER_PATH := $(GOPATH)/bin/$(LINTER_EXECUTABLE)
 
@@ -22,5 +25,9 @@ install-tools:
 	go get github.com/google/wire/cmd/wire
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.46.2
 
+.PHONY: init
 init:
 	find . -name '*.keep' | xargs rm
+	go mod init $(PROJECT_PACKAGE)
+	go mod tidy
+	make install-tools
