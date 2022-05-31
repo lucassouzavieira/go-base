@@ -10,21 +10,10 @@ service Transaction {
 }
 
 // Define app messages
-message TransactionLogRequest {
-    enum TransactionLogType {
-        UNKNOWN = 0;
-        TYPE_ID = 1;
-        SOURCE = 2;
-        ACCOUNT_ID = 3;
-        TYPE_ID_AND_SOURCE = 4;
-        TYPE_ID_AND_ACCOUNT_ID = 5;
-        SOURCE_AND_ACCOUNT_ID = 6;
-    }
-
-    TransactionLogRequest.TransactionLogType log_type = 1;
-    int64 type_id = 2;
-    string source = 3;
-    int64 account_id = 4;
+message TransactionLogRequest {;
+    int64 type_id = 1;
+    string source = 2;
+    int64 account_id = 3;
 }
 
 

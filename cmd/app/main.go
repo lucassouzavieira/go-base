@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"os"
+	logging "github.com/lucassvieira/go-project-layout/internal/logging"
 )
 
 func main() {
-	fmt.Fprintln(os.Stderr, "Logging out..")
-	fmt.Println("Writing...")
+	logging.LogMessage("Logging out...")
 }
