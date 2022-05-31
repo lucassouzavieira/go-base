@@ -33,7 +33,7 @@ docker-build:
 	--build-arg APP_DIR=$(APP_DIR) 
 
 proto:
-	protoc --go-grpc_out=:. internal/grpc/schema/*.proto
+	protoc --go_out=:. --go-grpc_out=:. internal/grpc/schema/*.proto
 
 .PHONY: lint
 lint:
