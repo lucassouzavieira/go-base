@@ -2,6 +2,7 @@ mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 base_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 
 # Golang project related settings
+GO?=go
 APP=$(base_dir)
 APP_DIR=app
 PROJECT_PACKAGE=github.com/lucassvieira/$(APP)
@@ -38,6 +39,9 @@ proto:
 .PHONY: lint
 lint:
 	$(LINTER_PATH) run ./...
+
+test:
+	$(GO) test -timeout 3m ./...
 
 # Utilitary commands
 install-tools:
