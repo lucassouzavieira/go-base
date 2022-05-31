@@ -40,6 +40,10 @@ proto:
 lint:
 	$(LINTER_PATH) run ./...
 
+.PHONY: fmt
+fmt:
+	$(LINTER_PATH) run ./...
+
 test:
 	$(GO) test -timeout 3m ./...
 
