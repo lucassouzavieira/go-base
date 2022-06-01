@@ -1,12 +1,17 @@
 package http
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/gorilla/mux"
+	"golang.org/x/sync/errgroup"
 )
 
 type item struct {
@@ -37,13 +42,36 @@ func initRouter() *mux.Router {
 }
 
 func InitHttpServer() {
+	ctx, cancel := context.WithCancel(context.Background())
+
+	go func() {
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+
+		<-c
+		cancel()
+	}()
+
 	router := initRouter()
-	logger := log.New(os.Stderr, "ONBOARDING-LVIEIRA: ", 0)
+	httpServer := &http.Server{
+		Addr:    ":8080",
+		Handler: router,
+	}
+
+	logger := log.New(os.Stderr, "HTTP Server: ", 0)
 	logger.Output(2, "HTTP server started. Logs for testing purposes only")
 
-	err := http.ListenAndServe(":8080", router)
+	g, gCtx := errgroup.WithContext(ctx)
+	g.Go(func() error {
+		return httpServer.ListenAndServe()
+	})
 
-	if err != nil {
-		logger.Output(2, err.Error())
+	g.Go(func() error {
+		<-gCtx.Done()
+		return httpServer.Shutdown(context.Background())
+	})
+
+	if err := g.Wait(); err != nil {
+		logger.Output(2, fmt.Sprintf("Exit reason: %s", err))
 	}
 }

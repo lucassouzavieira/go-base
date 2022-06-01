@@ -15,7 +15,7 @@ func makeRequest(req *http.Request) *httptest.ResponseRecorder {
 
 // Tests
 func TestListItems(t *testing.T) {
-	req, _ := http.NewRequest("GET", "/api/v1/items", nil)
+	req, _ := http.NewRequest("GET", "/api/v1/hello", nil)
 	response := makeRequest(req)
 
 	if response.Code != 200 {
