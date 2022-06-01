@@ -1,8 +1,8 @@
 package main
 
 import (
-	web "github.com/lucassvieira/go-project-layout/internal/http"
-	logging "github.com/lucassvieira/go-project-layout/internal/logging"
+	web "github.com/lucassvieira/go-base/internal/http"
+	logging "github.com/lucassvieira/go-base/internal/logging"
 )
 
 func main() {

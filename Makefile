@@ -53,7 +53,6 @@ install-tools:
 
 .PHONY: init
 init:
-	find . -name '*.keep' | xargs rm
 	rm -f go.mod go.sum
 	go mod init $(PROJECT_PACKAGE)
 	go mod tidy
