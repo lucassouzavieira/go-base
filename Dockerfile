@@ -1,39 +1,27 @@
 FROM golang:1.18-alpine AS builder
-RUN apk update && apk add make git gcc musl-dev gdb
 
-ARG GITHUB_TOKEN
-ARG WORK_DIR
-ARG APP_DIR
-ARG APP_NAME
-ARG APP
-
-ENV GITHUB_TOKEN=$GITHUB_TOKEN
-ENV WORK_DIR=$WORK_DIR
-ENV APP_DIR=$APP_DIR
-ENV APP_NAME=$APP_NAME
-ENV APP=$APP
+ENV APP=go-base
 ENV GO111MODULE=on
 
-RUN apk add --update gcc g++ openssh git make
+RUN apk update && apk add git make gdb
+WORKDIR /go/src/github.com/lucassouzavieira/$APP/
 
-# Building steps
-WORKDIR /go/src/github.com/lucassvieira/$APP
-
+# Handle dependencies
 COPY go.mod go.sum ./
+COPY . ./
 RUN go mod download
-COPY . .
 
-RUN make build
-COPY build/$APP /app/$APP
+# Build
+RUN CGO_ENABLED=0 go build -o /build/app -a ./cmd/app
+RUN mv /build/app /app
 
+# Final image
 FROM alpine:latest AS compile
 
-RUN apk add gdb
-RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
-    apk update && \
-    apk add --no-cache \
-    ca-certificates
+RUN apk --no-cache add ca-certificates
+COPY --from=builder /app /app
 
-COPY --from=builder /app/$APP /app/$APP
+EXPOSE 8080
+EXPOSE 8081
 
-CMD ["./app/go-project-layout"]
+CMD ["./app"]

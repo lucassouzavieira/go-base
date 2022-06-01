@@ -6,7 +6,7 @@ GO?=go
 APP?=$(base_dir)
 APP_NAME=my-app
 APP_DIR=app
-PROJECT_PACKAGE=github.com/lucassvieira/$(APP)
+PROJECT_PACKAGE=github.com/lucassouzavieira/$(APP)
 WORK_DIR=/go/src/$(PROJECT_PACKAGE)
 BUILD_DIRECTORY=build
 LINTER_EXECUTABLE := golangci-lint
@@ -20,17 +20,16 @@ DOCKER_IMAGE=$(APP)
 DOCKER_TAG=1.0
 DOCKER_NAMESPACE=lucassvieira
 DOCKER_IMAGE_NAME=$(DOCKER_NAMESPACE)/$(DOCKER_IMAGE)
+DOCKER_BUILD_ENV :=
+DOCKER_BUILD_ENV += --log-level=debug --platform=linux/amd64 --rm
 
 # Make commands
 .PHONY: build
 build:
-	$(BUILD_ENV) go build -o build/$(APP) -a ./cmd/$(APP_DIR)
+	$(BUILD_ENV) go build -o build/$(APP_NAME) -a ./cmd/$(APP_DIR)
 
 docker-build:
-	docker build --log-level=debug --platform=linux/amd64 --rm -t $(DOCKER_IMAGE_NAME):$(DOCKER_TAG) . --build-arg APP=$(APP) \
-	--build-arg WORK_DIR=$(WORK_DIR) \
-	--build-arg APP_DIR=$(APP_DIR) \
-	--build-arg APP_NAME=$(APP_NAME) --build-arg APP_NAME=$(APP_NAME) --build-arg APP_NAME=$(APP_NAME)
+	docker build $(DOCKER_BUILD_ENV) -t $(DOCKER_IMAGE_NAME):$(DOCKER_TAG) .
 
 proto:
 	protoc --go_out=:. --go-grpc_out=:. internal/protobuf/schema/*.proto
