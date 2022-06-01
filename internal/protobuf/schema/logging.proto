@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package transaction;
+package logging;
 
 option go_package = "pkg/protobuf/schema/logging";
 

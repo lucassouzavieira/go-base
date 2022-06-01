@@ -35,7 +35,7 @@ func NewTransactionClient(cc grpc.ClientConnInterface) TransactionClient {
 
 func (c *transactionClient) GetTransactions(ctx context.Context, in *LogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
 	out := new(LogResponse)
-	err := c.cc.Invoke(ctx, "/transaction.Transaction/GetTransactions", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/logging.Transaction/GetTransactions", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func _Transaction_GetTransactions_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/transaction.Transaction/GetTransactions",
+		FullMethod: "/logging.Transaction/GetTransactions",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TransactionServer).GetTransactions(ctx, req.(*LogRequest))
@@ -92,7 +92,7 @@ func _Transaction_GetTransactions_Handler(srv interface{}, ctx context.Context, 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Transaction_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "transaction.Transaction",
+	ServiceName: "logging.Transaction",
 	HandlerType: (*TransactionServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
