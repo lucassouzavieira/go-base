@@ -16,3 +16,6 @@ Builds the docker image
 
 - `make proto`  
 Generate the protobuf stubs from proto definitions
+
+- `make test`  
+Run all project tests
