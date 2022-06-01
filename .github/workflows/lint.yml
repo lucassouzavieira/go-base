@@ -1,4 +1,4 @@
-name: Build
+name: Lint
 on: [push]
 jobs:
   build:
@@ -12,5 +12,5 @@ jobs:
       - name: Handle dependencies
         run: make init
 
-      - name: Build the project
-        run: make build
+      - name: Run linter
+        run: make lint
