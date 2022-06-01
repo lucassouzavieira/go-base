@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.19.4
-// source: internal/protobuf/schema/transaction.proto
+// source: internal/protobuf/schema/logging.proto
 
-package transaction
+package logging
 
 import (
 	context "context"
@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TransactionClient interface {
-	GetTransactionLogs(ctx context.Context, in *TransactionLogRequest, opts ...grpc.CallOption) (*TransactionLogResponse, error)
+	GetTransactions(ctx context.Context, in *LogRequest, opts ...grpc.CallOption) (*LogResponse, error)
 }
 
 type transactionClient struct {
@@ -33,9 +33,9 @@ func NewTransactionClient(cc grpc.ClientConnInterface) TransactionClient {
 	return &transactionClient{cc}
 }
 
-func (c *transactionClient) GetTransactionLogs(ctx context.Context, in *TransactionLogRequest, opts ...grpc.CallOption) (*TransactionLogResponse, error) {
-	out := new(TransactionLogResponse)
-	err := c.cc.Invoke(ctx, "/transaction.Transaction/GetTransactionLogs", in, out, opts...)
+func (c *transactionClient) GetTransactions(ctx context.Context, in *LogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	out := new(LogResponse)
+	err := c.cc.Invoke(ctx, "/transaction.Transaction/GetTransactions", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *transactionClient) GetTransactionLogs(ctx context.Context, in *Transact
 // All implementations must embed UnimplementedTransactionServer
 // for forward compatibility
 type TransactionServer interface {
-	GetTransactionLogs(context.Context, *TransactionLogRequest) (*TransactionLogResponse, error)
+	GetTransactions(context.Context, *LogRequest) (*LogResponse, error)
 	mustEmbedUnimplementedTransactionServer()
 }
 
@@ -54,8 +54,8 @@ type TransactionServer interface {
 type UnimplementedTransactionServer struct {
 }
 
-func (UnimplementedTransactionServer) GetTransactionLogs(context.Context, *TransactionLogRequest) (*TransactionLogResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTransactionLogs not implemented")
+func (UnimplementedTransactionServer) GetTransactions(context.Context, *LogRequest) (*LogResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTransactions not implemented")
 }
 func (UnimplementedTransactionServer) mustEmbedUnimplementedTransactionServer() {}
 
@@ -70,20 +70,20 @@ func RegisterTransactionServer(s grpc.ServiceRegistrar, srv TransactionServer) {
 	s.RegisterService(&Transaction_ServiceDesc, srv)
 }
 
-func _Transaction_GetTransactionLogs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TransactionLogRequest)
+func _Transaction_GetTransactions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TransactionServer).GetTransactionLogs(ctx, in)
+		return srv.(TransactionServer).GetTransactions(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/transaction.Transaction/GetTransactionLogs",
+		FullMethod: "/transaction.Transaction/GetTransactions",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServer).GetTransactionLogs(ctx, req.(*TransactionLogRequest))
+		return srv.(TransactionServer).GetTransactions(ctx, req.(*LogRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -96,10 +96,10 @@ var Transaction_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*TransactionServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetTransactionLogs",
-			Handler:    _Transaction_GetTransactionLogs_Handler,
+			MethodName: "GetTransactions",
+			Handler:    _Transaction_GetTransactions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "internal/protobuf/schema/transaction.proto",
+	Metadata: "internal/protobuf/schema/logging.proto",
 }
