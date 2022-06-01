@@ -3,7 +3,6 @@ package http
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -30,7 +29,9 @@ var menu = []item{
 
 // Endpoints related functions
 func listItems(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(menu)
+	if err := json.NewEncoder(w).Encode(menu); err != nil {
+		http.Error(w, "Unable to enconde data", 500)
+	}
 }
 
 // Router related
@@ -59,7 +60,7 @@ func InitHttpServer() {
 	}
 
 	logger := log.New(os.Stderr, "HTTP Server: ", 0)
-	logger.Output(2, "HTTP server started. Logs for testing purposes only")
+	logger.Println("HTTP server started. Logs for testing purposes only")
 
 	g, gCtx := errgroup.WithContext(ctx)
 	g.Go(func() error {
@@ -72,6 +73,6 @@ func InitHttpServer() {
 	})
 
 	if err := g.Wait(); err != nil {
-		logger.Output(2, fmt.Sprintf("Exit reason: %s", err))
+		logger.Printf("Exit reason: %s \n", err)
 	}
 }
