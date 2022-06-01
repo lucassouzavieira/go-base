@@ -1,0 +1,16 @@
+name: Build the application
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+
+      - name: Handle dependencies
+        run: make init
+
+      - name: Build the project
+        run: make build
