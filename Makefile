@@ -6,6 +6,8 @@ GO?=go
 APP?=$(base_dir)
 APP_NAME=my-app
 APP_DIR=app
+CLI_NAME=$(APP)-cli
+CLI_DIR=cli
 PROJECT_PACKAGE=github.com/lucassouzavieira/$(APP)
 WORK_DIR=/go/src/$(PROJECT_PACKAGE)
 BUILD_DIRECTORY=build
@@ -28,6 +30,9 @@ DOCKER_BUILD_ENV += --log-level=debug --platform=linux/amd64 --rm
 .PHONY: build
 build:
 	$(BUILD_ENV) go build -o build/$(APP_NAME) -a ./cmd/$(APP_DIR)
+
+build-cli:
+	$(BUILD_ENV) go build -o build/$(CLI_NAME) -a ./cmd/$(CLI_DIR)
 
 docker-build:
 	docker build $(DOCKER_BUILD_ENV) -t $(DOCKER_IMAGE_NAME):$(DOCKER_TAG) .
