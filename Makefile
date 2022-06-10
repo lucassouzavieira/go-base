@@ -11,6 +11,7 @@ WORK_DIR=/go/src/$(PROJECT_PACKAGE)
 BUILD_DIRECTORY=build
 LINTER_EXECUTABLE := golangci-lint
 LINTER_PATH := $(GOPATH)/bin/$(LINTER_EXECUTABLE)
+GOFMT := gofmt
 BUILD_ENV :=
 BUILD_ENV += CGO_ENABLED=0
 
@@ -18,7 +19,7 @@ BUILD_ENV += CGO_ENABLED=0
 DOCKER_REPOSITORY=localhost
 DOCKER_IMAGE=$(APP)
 DOCKER_TAG=1.0
-DOCKER_NAMESPACE=lucassvieira
+DOCKER_NAMESPACE=localns
 DOCKER_IMAGE_NAME=$(DOCKER_NAMESPACE)/$(DOCKER_IMAGE)
 DOCKER_BUILD_ENV :=
 DOCKER_BUILD_ENV += --log-level=debug --platform=linux/amd64 --rm
@@ -40,7 +41,7 @@ lint:
 
 .PHONY: fmt
 fmt:
-	$(LINTER_PATH) run ./...
+	$(GOFMT) -s -w .
 
 test:
 	$(GO) test  -v -cover -timeout 3m ./...
