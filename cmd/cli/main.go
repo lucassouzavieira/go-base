@@ -10,7 +10,6 @@ import (
 func main() {
 	app := cli.App("cli", "CLI App")
 
-	// Declare our first command, which is invocable with "uman list"
 	app.Command("hello-world", "a simple cli command", func(cmd *cli.Cmd) {
 		cmd.Action = func() {
 			logrus.Info("Hello World!")
