@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "pkg/pb/user";
+
+// Services
+service User {
+    rpc GetUsers(UserRequest) returns (UsersRespone);
+}
+
+// Define app messages
+message UserRequest {;
+    int64 type_id = 1;
+    string source = 2;
+    int64 user_id = 3;
+}
+
+
+message UsersRespone {
+    int64 count = 1;
+    float sum = 2;
+}

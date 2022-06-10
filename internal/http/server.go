@@ -3,32 +3,42 @@ package http
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/sync/errgroup"
 )
 
-type item struct {
-	ID          string  `json:"id"`
-	Title       string  `json:"title"`
-	Description string  `json:"description"`
-	Price       float32 `json:"price"`
+type Users struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
 
-var menu = []item{
-	{ID: "1", Title: "Baby Ribs with Fries", Description: "Ribs with fries. Optional Barbecue sauce", Price: 2.35},
-	{ID: "2", Title: "Chicken with Rice", Description: "Rice, fried chicken and Teriyaki sauce", Price: 2.35},
-	{ID: "3", Title: "Vegetarian", Description: "Vegetarian meal", Price: 2.35},
-	{ID: "4", Title: "Natural sandwich", Description: "Small sandwich with tomatoes, cheddar and ham.", Price: 2.35},
+var menu = []Users{
+	{
+		ID:   "1",
+		Name: "Freddie Mercury",
+	},
+	{
+		ID:   "1",
+		Name: "Brian May",
+	},
+	{
+		ID:   "1",
+		Name: "Roger Taylor",
+	},
+	{
+		ID:   "1",
+		Name: "John Deaconß",
+	},
 }
 
 // Endpoints related functions
-func listItems(w http.ResponseWriter, r *http.Request) {
+func listUsers(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(menu); err != nil {
 		http.Error(w, "Unable to enconde data", 500)
 	}
@@ -37,7 +47,7 @@ func listItems(w http.ResponseWriter, r *http.Request) {
 // Router related
 func initRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/api/v1/hello", listItems)
+	router.HandleFunc("/api/v1/users", listUsers)
 
 	return router
 }
@@ -59,8 +69,7 @@ func InitHttpServer() {
 		Handler: router,
 	}
 
-	logger := log.New(os.Stderr, "HTTP Server: ", 0)
-	logger.Println("HTTP server started. Logs for testing purposes only")
+	logrus.Info("HTTP server started. Logs for testing purposes only")
 
 	g, gCtx := errgroup.WithContext(ctx)
 	g.Go(func() error {
@@ -73,6 +82,6 @@ func InitHttpServer() {
 	})
 
 	if err := g.Wait(); err != nil {
-		logger.Printf("Exit reason: %s \n", err)
+		logrus.WithError(err).Panic("Server shutting down with error...")
 	}
 }

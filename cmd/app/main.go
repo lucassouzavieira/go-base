@@ -2,10 +2,10 @@ package main
 
 import (
 	web "github.com/lucassouzavieira/go-base/internal/http"
-	logging "github.com/lucassouzavieira/go-base/internal/logging"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
-	logging.LogMessage("Logging out...")
+	logrus.Info("Logging out something...")
 	web.InitHttpServer()
 }
