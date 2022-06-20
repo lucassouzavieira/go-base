@@ -1,4 +1,5 @@
 [![test](https://github.com/lucassouzavieira/go-base/actions/workflows/tests.yml/badge.svg)](https://github.com/lucassouzavieira/go-base/actions/workflows/tests.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/lucassouzavieira/go-base)](https://goreportcard.com/report/github.com/lucassouzavieira/go-base)
 # Standard Go Project Layout
 
 ## Overview
